@@ -29,7 +29,7 @@ struct CGP {
 
 
     // racuna outpute za dani graf na racun danih inputa
-    void propagate(vector<unsigned char> inputs);
+    unsigned char propagate(vector<unsigned char> inputs);
 
     // racuna zadanu operaciju nad danim argumentima
     double calculateFunction(vector<unsigned char> calcOutputs, int functionId, vector<int> nodeInputIds);

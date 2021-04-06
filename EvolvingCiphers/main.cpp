@@ -1,26 +1,34 @@
 #include <bitset>
 #include <iostream>
 #include "cgp.hpp"
+#include "configs.hpp"
+#include "evolution.hpp"
 
 using namespace std;
 
 int main(void)
 {
     srand(time(NULL));
-    CGP cgp(2, 1, 1, 2, 2);
-    vector<unsigned char> inputs = { 0b11001100, 0b10000011 };
-    bitset<8> i1(inputs.at(0));
-    bitset<8> i2(inputs.at(1));
-    vector<int> graph = cgp.randomGraph();
-    cout << "genotype: ";
-    for (auto i : graph) 
-    {
-        cout << i << " ";
-    }
+    CGP cgpAlice(numInputs, numOutputs, numRows, numColumns, numNodeInputs);
+    vector<unsigned char> inputs = { 0b11100111, 0b00000000, 0b10101010};
+    vector<unsigned char> outputs;
+    unsigned char key = 0b10000011;
+   
+    vector<int> graph = {3,0,1,0,0,0,2};
+	for(auto i : graph)
+	{
+        cout << i;
+	}
     cout << endl;
-    cout << "input 0: " << i1 << " input 1: " << i2 << endl;
-	
-    cgp.graph = graph;
-    cgp.propagate(inputs);
+    cgpAlice.graph = graph;
+
+	for(auto a : inputs)
+	{
+        vector<unsigned char> inputRound = { a, key };
+        outputs.push_back(cgpAlice.propagate(inputRound));
+	}
+
+    //cout << fitnessFunction(inputs, outputs);
+    runCGP(inputs, outputs, key); //prepravi nazive
     return 0;
 }

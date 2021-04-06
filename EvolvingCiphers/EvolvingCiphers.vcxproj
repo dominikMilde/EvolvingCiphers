@@ -20,9 +20,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cgp.hpp" />
+    <ClInclude Include="configs.hpp" />
+    <ClInclude Include="evolution.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cgp.cpp" />
+    <ClCompile Include="evolution.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

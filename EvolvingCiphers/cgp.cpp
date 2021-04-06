@@ -37,7 +37,7 @@ vector<int> CGP::randomGraph()
     return graph;
 }
 
-void CGP::propagate(vector<unsigned char> inputs)
+unsigned char CGP::propagate(vector<unsigned char> inputs)
 {
     vector<unsigned char> nodeOutputs = inputs;
     for (int i = 0; i < c; i++)
@@ -63,7 +63,9 @@ void CGP::propagate(vector<unsigned char> inputs)
         unsigned char out = nodeOutputs.at(pos);
 
         bitset<8> x(out);
-        std::cout << "output: " << x << '\n';
+        //std::cout << "outputCGP: " << x << '\n';
+
+        return out;
     }
 }
 

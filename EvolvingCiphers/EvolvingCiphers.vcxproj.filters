@@ -18,12 +18,21 @@
     <ClInclude Include="cgp.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="evolution.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="configs.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cgp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="evolution.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
