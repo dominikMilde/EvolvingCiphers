@@ -7,13 +7,13 @@
 
 double fitnessFunction(vector<unsigned char> inputs, vector<unsigned char> outputs);
 
-Graph findBestGraph();
+Graph findBestGraph(vector<Graph>& graphs);
 
-Graph mutation(Graph graphStruct);
+Graph mutation(Graph graphStruct, bool giveKey);
 
 vector<int> randomGraph();
 
-void fillInitialPopulationCGP();
+void fillInitialPopulationCGP(vector<Graph>& graphs, bool giveKey);
 
 void print(Graph& g);
 

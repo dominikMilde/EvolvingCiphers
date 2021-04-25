@@ -11,15 +11,15 @@ struct Graph {
 };
 
 struct CGP {
-    // num of inputs
+    // num of plaintext
     int n;
-    // num of outputs
+    // num of ciphertext
     int m;
     // num of rows
     int r;
     // num of columns
     int c;
-    // num of node inputs
+    // num of node plaintext
     int a;
     vector<int> graph;
 

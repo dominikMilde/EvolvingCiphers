@@ -7,26 +7,39 @@
 
 CGP cgp(numInputs, numOutputs, numRows, numColumns, numNodeInputs);
 
-vector<Graph> graphs;
+vector<Graph> graphsBob;
+vector<Graph> graphsEve;
+
+Graph bestBob;
+Graph bestEve;
+
 minstd_rand randomEngineCGP;
 
-vector<unsigned char> inputs;
-vector<unsigned char> outputs;
+vector<unsigned char> plaintext;
+vector<unsigned char> ciphertext;
 unsigned char key;
 
-double fitnessIndividual(vector <int> graph)
+double fitnessIndividual(vector <int> graph, bool giveKey)
 {
 	cgp.graph = graph;
 	vector <unsigned char> runnedOutputs;
-	for (auto a : outputs)
+	for (auto cipher : ciphertext)
 	{
 		//cout << a << endl;
-		vector<unsigned char> forCgpIn = { a, key };
-
-		runnedOutputs.push_back(cgp.propagate(forCgpIn));
+		if (giveKey)
+		{
+			vector<unsigned char> forCgpIn = { cipher, key };
+			runnedOutputs.push_back(cgp.propagate(forCgpIn));
+		}
+		else
+		{
+			vector<unsigned char> forCgpIn = { cipher, cipher };
+			runnedOutputs.push_back(cgp.propagate(forCgpIn));
+		}
+		
 	}
 	//cout << runnedOutputs[0] << endl;
-	return fitnessFunction(inputs, runnedOutputs);
+	return fitnessFunction(plaintext, runnedOutputs);
 }
 
 double fitnessFunction(vector<unsigned char> inputs, vector<unsigned char> outputs)
@@ -41,12 +54,12 @@ double fitnessFunction(vector<unsigned char> inputs, vector<unsigned char> outpu
 	return fitness / (8.0 * inputs.size());
 }
 
-Graph findBestGraph()
+Graph findBestGraph(vector<Graph>& graphs)
 {
 
 	int idxBest = 0;
 	for (int i = 1; i < populationSize; i++) {
-		if (graphs.at(i).fitness > graphs.at(idxBest).fitness) {
+		if (graphs.at(i).fitness > graphsBob.at(idxBest).fitness) {
 			idxBest = i;
 		}
 	}
@@ -64,10 +77,10 @@ vector<int> crossover(vector<int>& mainGraph, vector<int>& otherGraph)
 	return child;
 }
 
-Graph crossAndReturnBestOfThree(Graph firstParent, Graph secondParent)
+Graph crossAndReturnBestOfThree(Graph firstParent, Graph secondParent, bool giveKey)
 {
 	Graph child(crossover(firstParent.graph, secondParent.graph), NULL);
-	child.fitness = fitnessIndividual(child.graph);
+	child.fitness = fitnessIndividual(child.graph, giveKey);
 
 	Graph betterParent = firstParent;
 	if (secondParent.fitness > firstParent.fitness)
@@ -82,7 +95,7 @@ Graph crossAndReturnBestOfThree(Graph firstParent, Graph secondParent)
 	return betterParent;
 }
 
-Graph mutation(Graph graphStruct)
+Graph mutation(Graph graphStruct, bool giveKey)
 {
 	int graphSize = graphStruct.graph.size();
 	vector<int> graph = graphStruct.graph;
@@ -111,7 +124,7 @@ Graph mutation(Graph graphStruct)
 	
 	
 	
-	double fitness = fitnessIndividual(graph);
+	double fitness = fitnessIndividual(graph, giveKey);
 	Graph mutatedGraph(graph, fitness);
 	
 	return mutatedGraph; //novi!!!
@@ -143,7 +156,7 @@ vector<int> randomGraph()
 }
 
 
-void fillInitialPopulationCGP()
+void fillInitialPopulationCGP(vector<Graph> &graphs, bool giveKey)
 {
 	cout << endl;
 	graphs.clear();
@@ -157,7 +170,7 @@ void fillInitialPopulationCGP()
 		
 		
 		//cout << "pop #" << i << ": ";
-		double fitness = fitnessIndividual(rG);
+		double fitness = fitnessIndividual(rG, giveKey);
 		//cout << "fitness: " << fitness << endl;
 		Graph randGraph = Graph(rG, fitness);
 		graphs.push_back(randGraph);
@@ -184,14 +197,119 @@ void print(Graph& g) {
 }
 
 
-Graph runCGP(vector<unsigned char> inputsF, vector<unsigned char> outputsF, unsigned char keyF)
+Graph runCGP(vector<unsigned char> plainF, vector<unsigned char> cipherF, unsigned char keyF)
 {
 
-	inputs = inputsF;
-	outputs = outputsF;
+	plaintext = plainF;
+	ciphertext = cipherF;
 	key = keyF;
 	
-	fillInitialPopulationCGP();
+	fillInitialPopulationCGP(graphsBob, true);
+	//SteadyStateTournament
+	for (int generation = 0; generation < generations; generation++)
+	{
+		for(int n=0; n< crossoversInTournament; n++)
+		{
+			vector<int> idsToCross;
+			for (int t = 0; t < tournamentSize; t++)
+			{
+				int id = rand() % populationSize;
+				idsToCross.push_back(id);
+			}
+			int idOfWorst = idsToCross.at(0);
+			for (int i = 0; i < idsToCross.size(); i++)
+			{
+				if (graphsBob.at(idsToCross.at(i)).fitness < graphsBob.at(idOfWorst).fitness) {
+					idOfWorst = idsToCross.at(i);
+				}
+			}
+			int indexOfFirst, indexOfSecond;
+			do {
+				indexOfFirst = rand() % tournamentSize;
+			} while (idsToCross.at(indexOfFirst) == idOfWorst);
+			do
+			{
+				indexOfSecond = rand() % tournamentSize;
+			} while (idsToCross.at(indexOfSecond) == idOfWorst || idsToCross.at(indexOfSecond) == idsToCross.at(indexOfFirst));
+			Graph offspring = crossAndReturnBestOfThree(graphsBob.at(indexOfFirst), graphsBob.at(indexOfSecond), true);
+			graphsBob.at(idOfWorst) = offspring;
+			double probability = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
+
+			if (probability < mutationProbability)
+			{
+				Graph mutated = mutation(graphsBob.at(idOfWorst), true);
+				graphsBob.at(idOfWorst) = mutated;
+			}
+		}
+		
+		cout << "Generation: " << generation + 1 << endl;
+		bestBob = findBestGraph(graphsBob);
+		cout << "Score of best individual BOB: " << bestBob.fitness << endl;
+		cout << "Genes of the best individual BOB: ";
+		print(bestBob);
+		cout << endl;
+
+		cout << "------------------------------------" << endl;
+
+		if (bestBob.fitness > 0.99) {
+			break;
+		}
+		
+
+	}
+	fillInitialPopulationCGP(graphsEve, false);
+	for (int generation = 0; generation < generations; generation++)
+	{
+		for (int n = 0; n < crossoversInTournament; n++) //zadani br evaluacija
+		{
+			vector<int> idsToCross;
+			for (int t = 0; t < tournamentSize; t++)
+			{
+				int id = rand() % populationSize;
+				idsToCross.push_back(id);
+			}
+			int idOfWorst = idsToCross.at(0);
+			for (int i = 0; i < idsToCross.size(); i++)
+			{
+				if (graphsEve.at(idsToCross.at(i)).fitness < graphsEve.at(idOfWorst).fitness) {
+					idOfWorst = idsToCross.at(i);
+				}
+			}
+			int indexOfFirst, indexOfSecond;
+			do {
+				indexOfFirst = rand() % tournamentSize;
+			} while (idsToCross.at(indexOfFirst) == idOfWorst);
+			do
+			{
+				indexOfSecond = rand() % tournamentSize;
+			} while (idsToCross.at(indexOfSecond) == idOfWorst || idsToCross.at(indexOfSecond) == idsToCross.at(indexOfFirst));
+			Graph offspring = crossAndReturnBestOfThree(graphsEve.at(indexOfFirst), graphsEve.at(indexOfSecond), false);
+			graphsEve.at(idOfWorst) = offspring;
+			double probability = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
+
+			if (probability < mutationProbability)
+			{
+				Graph mutated = mutation(graphsEve.at(idOfWorst), false);
+				graphsEve.at(idOfWorst) = mutated;
+			}
+		}
+
+		cout << "Generation: " << generation + 1 << endl;
+		bestEve = findBestGraph(graphsEve);
+		cout << "Score of best individual EVE: " << bestEve.fitness << endl;
+		cout << "Genes of the best individual EVE: ";
+		print(bestEve);
+		cout << endl;
+
+		cout << "------------------------------------" << endl;
+
+		if (bestEve.fitness > 0.99) {
+			break;
+		}
+
+
+	}
+	/*
 	for(int generation=0; generation < generations; generation++)
 	{
 		for (int t = 0; t < tournamentSize; t++)
@@ -204,21 +322,21 @@ Graph runCGP(vector<unsigned char> inputsF, vector<unsigned char> outputsF, unsi
 				do {
 					indexOfSecond = rand() % populationSize;
 				} while (indexOfSecond == indexOfFirst);
-				Graph offspring = crossAndReturnBestOfThree(graphs.at(indexOfFirst), graphs.at(indexOfSecond));
+				Graph offspring = crossAndReturnBestOfThree(graphsBob.at(indexOfFirst), graphsBob.at(indexOfSecond));
 
-				double fitnessOfBetterParent = graphs.at(indexOfSecond).fitness;
-				if(graphs.at(indexOfSecond).fitness > fitnessOfBetterParent){
-					fitnessOfBetterParent = graphs.at(indexOfSecond).fitness;
+				double fitnessOfBetterParent = graphsBob.at(indexOfSecond).fitness;
+				if(graphsBob.at(indexOfSecond).fitness > fitnessOfBetterParent){
+					fitnessOfBetterParent = graphsBob.at(indexOfSecond).fitness;
 				} 
 				if(offspring.fitness > fitnessOfBetterParent)
 				{
-					if (graphs.at(indexOfFirst).fitness < graphs.at(indexOfSecond).fitness)
+					if (graphsBob.at(indexOfFirst).fitness < graphsBob.at(indexOfSecond).fitness)
 					{
-						graphs.at(indexOfFirst) = offspring;
+						graphsBob.at(indexOfFirst) = offspring;
 					}
 					else
 					{
-						graphs.at(indexOfSecond) = offspring;
+						graphsBob.at(indexOfSecond) = offspring;
 					}
 				}
 			}
@@ -226,8 +344,8 @@ Graph runCGP(vector<unsigned char> inputsF, vector<unsigned char> outputsF, unsi
 			if(probability < mutationProbability)
 			{
 				int indexToMutate = rand() % populationSize;
-				Graph mutated = mutation(graphs.at(indexToMutate));
-				graphs.at(indexToMutate) = mutated;
+				Graph mutated = mutation(graphsBob.at(indexToMutate));
+				graphsBob.at(indexToMutate) = mutated;
 			}
 		}
 		cout << "Generation: " << generation + 1 << endl;
@@ -244,5 +362,8 @@ Graph runCGP(vector<unsigned char> inputsF, vector<unsigned char> outputsF, unsi
 		}
 		
 	}
-	return findBestGraph();
+	*/
+	cout << "Score of best individual BOB: " << bestBob.fitness << endl;
+	cout << "Score of best individual EVE: " << bestEve.fitness << endl;
+	return bestBob;
 }
