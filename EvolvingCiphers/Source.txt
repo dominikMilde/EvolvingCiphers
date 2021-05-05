@@ -1,0 +1,22 @@
+﻿
+stvori_poruku() //pitanje - kolika je duljina ključa i poruke(sada 4B)
+stvori_ključ()
+
+stvori_populaciju_Alice()
+za svaku Alice: 
+	ocijeniFitness()
+za svaku generaciju: //izmijeniti u broj evaluacija interno ograničim
+	selekcija()
+	križanje()
+	mutacija()
+dok nije uvjet zaustavljanja
+
+
+ocijeniFitness():
+	fitnessNajboljiBob = generiraj_i_evoluiraj_Bobove() //traži reverznu funkciju, početna populacija su SAMO NAJBOLJE
+														//random grafovi, fitness je usporedba plaintexta i ciphertexta
+	fitnessNajboljaEva = generiraj_i_evoluiraj_Eve()    //traži ključ - pitanje kako biram početnu populaciju ključeva - NIJE DOVRŠENO
+													    //početna populacija su ključevi - fitness je usporedba plaintexta i ciphertexta - NIJE DOVRŠENO					
+	Alice.fitness = f(fitnessNajboljiBob, fitnessNajboljaEva)
+
+nakon križanja i mutacije se mora ponovno izračunati fitness Alice-ponovno učenje Boba i Eve za novu Alice

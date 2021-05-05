@@ -24,14 +24,11 @@ struct CGP {
     vector<int> graph;
 
     CGP(int n, int m, int r, int c, int a);
-
-    vector<int> randomGraph();
-
-
     // racuna outpute za dani graf na racun danih inputa
     unsigned char propagate(vector<unsigned char> inputs);
 
     // racuna zadanu operaciju nad danim argumentima
     double calculateFunction(vector<unsigned char> calcOutputs, int functionId, vector<int> nodeInputIds);
-
+	
+    vector<unsigned char> generateCipher(vector<unsigned char> plaintext, vector <unsigned char> key);
 };

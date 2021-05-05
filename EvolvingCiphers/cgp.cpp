@@ -12,31 +12,6 @@ Graph::Graph() {}
 //CGP cgp(2, 1, 1, 2, 2);
 CGP::CGP(int n, int m, int r, int c, int a) :  n(n), m(m), r(r), c(c), a(a){}
 
-vector<int> CGP::randomGraph()
-{
-    vector<int> graph;
-
-    for (int i = 0; i < c; i++)
-    {
-        int currMaxNodeOut = n + i * r;
-        for (int j = 0; j < r; j++)
-        {
-            graph.push_back(rand() % 6); //magic number!!! broj funkcija
-            for (int k = 0; k < a; k++)
-            {
-                graph.push_back(rand() % currMaxNodeOut);
-            }
-        }
-    }
-
-    int maxNodeOut = n + r * c;
-    for (int i = 0; i < m; i++)
-    {
-        graph.push_back(rand() % maxNodeOut);
-    }
-    return graph;
-}
-
 unsigned char CGP::propagate(vector<unsigned char> inputs)
 {
     vector<unsigned char> nodeOutputs = inputs;
@@ -116,5 +91,16 @@ double CGP::calculateFunction(vector<unsigned char> calcOutputs, int functionId,
        break;
     }
     return rez;
+}
+
+vector<unsigned char> CGP::generateCipher(vector<unsigned char> plaintext, vector <unsigned char> key)
+{
+    vector <unsigned char> ciphertext;
+	for(int i = 0; i<plaintext.size(); i++)
+	{
+        vector<unsigned char> input = { plaintext.at(i), key.at(i) };
+        ciphertext.push_back(propagate(input));
+	}
+    return ciphertext;
 }
 

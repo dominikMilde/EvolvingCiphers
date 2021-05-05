@@ -20,3 +20,7 @@ void print(Graph& g);
 void runGeneration();
 
 Graph runCGP(vector<unsigned char> inputsF, vector<unsigned char> outputsF, unsigned char key);
+
+Graph evaluateBob(vector <unsigned char>plaintext, vector <unsigned char>key, vector <unsigned char>ciphertext);
+
+double evaluateEva(Graph bob, vector <unsigned char>plaintext, vector <unsigned char>ciphertext);

@@ -22,11 +22,16 @@
     <ClInclude Include="cgp.hpp" />
     <ClInclude Include="configs.hpp" />
     <ClInclude Include="evolution.hpp" />
+    <ClInclude Include="key.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cgp.cpp" />
     <ClCompile Include="evolution.cpp" />
+    <ClCompile Include="key.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Source.txt" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

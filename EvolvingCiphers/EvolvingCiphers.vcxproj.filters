@@ -24,6 +24,9 @@
     <ClInclude Include="configs.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="key.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cgp.cpp">
@@ -35,5 +38,13 @@
     <ClCompile Include="evolution.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="key.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Source.txt">
+      <Filter>Source Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

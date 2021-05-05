@@ -8,32 +8,29 @@
 CGP cgp(numInputs, numOutputs, numRows, numColumns, numNodeInputs);
 
 vector<Graph> graphsBob;
-vector<Graph> graphsEve;
-
 Graph bestBob;
-Graph bestEve;
 
 minstd_rand randomEngineCGP;
 
 vector<unsigned char> plaintext;
 vector<unsigned char> ciphertext;
-unsigned char key;
+vector<unsigned char> key;
 
 double fitnessIndividual(vector <int> graph, bool giveKey)
 {
 	cgp.graph = graph;
 	vector <unsigned char> runnedOutputs;
-	for (auto cipher : ciphertext)
+	for (int i=0; i<key.size(); i++)
 	{
 		//cout << a << endl;
 		if (giveKey)
 		{
-			vector<unsigned char> forCgpIn = { cipher, key };
+			vector<unsigned char> forCgpIn = { ciphertext.at(i), key.at(i) };
 			runnedOutputs.push_back(cgp.propagate(forCgpIn));
 		}
 		else
 		{
-			vector<unsigned char> forCgpIn = { cipher, cipher };
+			vector<unsigned char> forCgpIn = { ciphertext.at(i), key.at(i) };
 			runnedOutputs.push_back(cgp.propagate(forCgpIn));
 		}
 		
@@ -150,9 +147,27 @@ vector<int> randomGraph()
 	int maxNodeOut = numInputs + numRows * numColumns;
 	for (int i = 0; i < numOutputs; i++)
 	{
-		graph.push_back(rand() % maxNodeOut);
+		graph.push_back(maxNodeOut/2 + rand()%(maxNodeOut/2));
 	}
 	return graph;
+}
+
+vector<bool> randomKey()
+{
+	vector<bool> key;
+	for(int i=0; i<8*keyLength; i++)
+	{
+		int a = rand() % 2;
+		if(a == 1)
+		{
+			key.push_back(true);
+		}
+		else
+		{
+			key.push_back(false);
+		}
+	}
+	return key;
 }
 
 
@@ -162,16 +177,11 @@ void fillInitialPopulationCGP(vector<Graph> &graphs, bool giveKey)
 	graphs.clear();
 	graphs.reserve(populationSize);
 
-	cout << "Generating initial population..." << endl;
+	//cout << "Generating initial population..." << endl;
 	for (int i = 1; i <= populationSize; i++)
 	{
 		vector<int> rG = randomGraph();
-		//cout << "prva tri:" << rG[0] << rG[1] << rG[2] << endl;
-		
-		
-		//cout << "pop #" << i << ": ";
 		double fitness = fitnessIndividual(rG, giveKey);
-		//cout << "fitness: " << fitness << endl;
 		Graph randGraph = Graph(rG, fitness);
 		graphs.push_back(randGraph);
 	}
@@ -196,7 +206,72 @@ void print(Graph& g) {
 		<< "CGP Fitness: " << g.fitness << endl << endl << endl;
 }
 
+Graph evaluateBob(vector <unsigned char>plaintextFunc, vector <unsigned char>keyFunc, vector <unsigned char>ciphertextFunc)
+{
+	plaintext = plaintextFunc;
+	key = keyFunc;
+	ciphertext = ciphertextFunc;
+	
+	fillInitialPopulationCGP(graphsBob, true);
+	for (int generation = 0; generation < generations; generation++)
+	{
+		for (int n = 0; n < crossoversInTournament; n++)
+		{
+			vector<int> idsToCross;
+			for (int t = 0; t < tournamentSize; t++)
+			{
+				int id = rand() % populationSize;
+				idsToCross.push_back(id);
+			}
+			int idOfWorst = idsToCross.at(0);
+			for (int i = 0; i < idsToCross.size(); i++)
+			{
+				if (graphsBob.at(idsToCross.at(i)).fitness < graphsBob.at(idOfWorst).fitness) {
+					idOfWorst = idsToCross.at(i);
+				}
+			}
+			int indexOfFirst, indexOfSecond;
+			do {
+				indexOfFirst = rand() % tournamentSize;
+			} while (idsToCross.at(indexOfFirst) == idOfWorst);
+			do
+			{
+				indexOfSecond = rand() % tournamentSize;
+			} while (idsToCross.at(indexOfSecond) == idOfWorst || idsToCross.at(indexOfSecond) == idsToCross.at(indexOfFirst));
+			Graph offspring = crossAndReturnBestOfThree(graphsBob.at(indexOfFirst), graphsBob.at(indexOfSecond), true);
+			graphsBob.at(idOfWorst) = offspring;
+			double probability = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
 
+			if (probability < mutationProbability)
+			{
+				Graph mutated = mutation(graphsBob.at(idOfWorst), true);
+				graphsBob.at(idOfWorst) = mutated;
+			}
+		}
+
+		//cout << "Generation: " << generation + 1 << endl;
+		bestBob = findBestGraph(graphsBob);
+		//cout << "Score of best individual BOB: " << bestBob.fitness << endl;
+		//cout << "Genes of the best individual BOB: ";
+		//print(bestBob);
+		//cout << endl;
+
+		//cout << "------------------------------------" << endl;
+
+		if (bestBob.fitness > 0.99) {
+			return bestBob;
+		}
+	}
+	return bestBob;
+}
+
+double evaluateEva(Graph bob, vector <unsigned char>plaintextFunc, vector <unsigned char>ciphertextFunc)
+{
+	plaintext = plaintextFunc;
+	ciphertext = ciphertextFunc;
+}
+/*
+ 
 Graph runCGP(vector<unsigned char> plainF, vector<unsigned char> cipherF, unsigned char keyF)
 {
 
@@ -307,7 +382,6 @@ Graph runCGP(vector<unsigned char> plainF, vector<unsigned char> cipherF, unsign
 			break;
 		}
 
-
 	}
 	/*
 	for(int generation=0; generation < generations; generation++)
@@ -362,8 +436,12 @@ Graph runCGP(vector<unsigned char> plainF, vector<unsigned char> cipherF, unsign
 		}
 		
 	}
-	*/
-	cout << "Score of best individual BOB: " << bestBob.fitness << endl;
-	cout << "Score of best individual EVE: " << bestEve.fitness << endl;
-	return bestBob;
+	
+cout << "Score of best individual BOB: " << bestBob.fitness << endl;
+cout << "Score of best individual EVE: " << bestEve.fitness << endl;
+return bestBob;
 }
+
+
+
+*/
