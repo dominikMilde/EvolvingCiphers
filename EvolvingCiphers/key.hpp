@@ -6,12 +6,14 @@
 using namespace std;
 
 class Key {
-    vector<bool> key;
+public:
+	vector<bool> key;
     double fitness;
+
     Key(vector<bool> key, double fitness);
     Key();
 
     vector <unsigned char> toChar();
-    
+    void printKey();
 };
 

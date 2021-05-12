@@ -19,4 +19,7 @@ ocijeniFitness():
 													    //početna populacija su ključevi - fitness je usporedba plaintexta i ciphertexta - NIJE DOVRŠENO					
 	Alice.fitness = f(fitnessNajboljiBob, fitnessNajboljaEva)
 
-nakon križanja i mutacije se mora ponovno izračunati fitness Alice-ponovno učenje Boba i Eve za novu Alice
+
+za N najboljih alice:
+	pokreni učenje Bob i Eva s primjenom runda
+	usporedi rezultat

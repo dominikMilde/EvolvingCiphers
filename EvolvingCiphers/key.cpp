@@ -1,5 +1,8 @@
 #include "key.hpp"
+
+#include <iostream>
 Key::Key(vector<bool> key, double fitness) : key(key), fitness(fitness){}
+Key::Key() {}
 
 vector<unsigned char> Key::toChar()
 {
@@ -19,4 +22,13 @@ vector<unsigned char> Key::toChar()
         vectored.push_back(c);
     }
     return vectored;
+}
+void Key::printKey()
+{
+	for (auto b : key)
+	{
+        b ? cout << "1" : cout << "0";
+	}
+    cout << "  ";
+    cout << fitness << endl;
 }

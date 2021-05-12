@@ -3,24 +3,45 @@
 #include <vector>
 
 #include "cgp.hpp"
+#include "key.hpp"
 
+double fitnessIndividual(vector <int>& graph, vector <unsigned char>& key, vector <unsigned char>& plaintext, vector <unsigned char>& ciphertext);
 
-double fitnessFunction(vector<unsigned char> inputs, vector<unsigned char> outputs);
+double fitnessFunction(vector<unsigned char>& inputs, vector<unsigned char>& outputs);
 
 Graph findBestGraph(vector<Graph>& graphs);
 
-Graph mutation(Graph graphStruct, bool giveKey);
+Key findBestKey(vector<Key>& keys);
+
+vector<int> crossover(vector<int>& mainGraph, vector<int>& otherGraph);
+
+vector<bool> crossoverKey(vector<bool>& firstKey, vector<bool>& secondKey);
+
+Graph crossAndReturnBestOfThree(Graph& firstParent, Graph& secondParent, vector <unsigned char>& key, vector <unsigned char>& plaintext, vector <unsigned char>& ciphertext);
+
+Key crossAndReturnBestOfThreeKey(Key& firstParent, Key& secondParent, vector <unsigned char>& plaintext, vector <unsigned char>& ciphertext, Graph& bob);
+
+Graph mutation(Graph& graphStruct, vector <unsigned char>& key, vector <unsigned char>& plaintext, vector <unsigned char>& ciphertext);
 
 vector<int> randomGraph();
 
-void fillInitialPopulationCGP(vector<Graph>& graphs, bool giveKey);
+vector<bool> randomKey();
+
+void fillInitialPopulationCGP(vector<Graph>& graphs, vector <unsigned char>& key, vector <unsigned char>& plaintext, vector <unsigned char>& ciphertext);
 
 void print(Graph& g);
 
-void runGeneration();
+Graph evaluateBob(vector <unsigned char>& plaintext, vector <unsigned char>& key, vector <unsigned char>& ciphertext);
 
-Graph runCGP(vector<unsigned char> inputsF, vector<unsigned char> outputsF, unsigned char key);
+Key evaluateEva(Graph &bob, vector <unsigned char>& plaintext, vector <unsigned char>& ciphertext);
 
-Graph evaluateBob(vector <unsigned char>plaintext, vector <unsigned char>key, vector <unsigned char>ciphertext);
+void fillInitialPopulationKeys(vector<Key>& keys, Graph& bob, vector <unsigned char>& plaintext, vector <unsigned char>& ciphertext);
 
-double evaluateEva(Graph bob, vector <unsigned char>plaintext, vector <unsigned char>ciphertext);
+double rateAlice(vector<int>& alice, vector <unsigned char>& plaintext, vector <unsigned char>& key);
+
+Graph crossAndReturnBestOfThreeAlice(Graph& firstParent, Graph& secondParent, vector<unsigned char>& key, vector<unsigned char>& plaintext);
+
+Graph mutationAlice(Graph& alice, vector<unsigned char>& key, vector<unsigned char>& plaintext);
+
+
+

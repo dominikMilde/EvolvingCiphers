@@ -77,8 +77,9 @@ double CGP::calculateFunction(vector<unsigned char> calcOutputs, int functionId,
         {
             rez = rez | 0b10000000;
         }
-    }
         break;
+    }
+        
     case 5: //ROL
     {
     	bool leftMostBit = (((calcInputs[0] & 0b10000000) == 0b10000000) ? true : false);
@@ -87,8 +88,23 @@ double CGP::calculateFunction(vector<unsigned char> calcOutputs, int functionId,
 	    {
 	        rez += 1;
 	    }
+        break;
     }
-       break;
+    case 6: //XOR ponovno pokretanje više puta
+    {
+        rez = calcInputs[0] ^ calcInputs[1];
+        break;
+    }
+    case 7: //XOR ponovno pokretanje više puta
+    {
+        rez = calcInputs[0] ^ calcInputs[1];
+        break;
+    }
+    case 8: //XOR ponovno pokretanje više puta
+    {
+        rez = calcInputs[0] ^ calcInputs[1];
+        break;
+    }
     }
     return rez;
 }
