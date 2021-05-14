@@ -9,49 +9,70 @@ using namespace std;
 int main(void)
 {
     srand(time(NULL));
-	CGP cgpAlice(numInputs, numOutputs, numRows, numColumns, numNodeInputs);
-	CGP cgpEva(numInputs, numOutputs, numRows, numColumns, numNodeInputs);
-
+	cout << "stvaram pocetni skup" << endl;
 	Key p;
 	Key k;
-	p.key = randomKey();
-	k.key = randomKey();
 
-    vector<unsigned char> plaintext = p.toChar();
-    vector<unsigned char> key =      k.toChar();
+    vector<vector<unsigned char>> plaintexts;
+	vector<vector<unsigned char>> keys;
+
+	for(int i = 0; i<sizeLearningSet; i++)
+	{
+		p.key = randomKey();
+		k.key = randomKey();
+
+		plaintexts.push_back(p.toChar());
+		keys.push_back(k.toChar());
+	}
 	
     vector<Graph> alicePopulation;
 	Graph bestAlice;
 	alicePopulation.reserve(populationSizeA);
+	
 	//generating population of Alice
 	for(int i = 0; i<populationSizeA; i++)
 	{
-		alicePopulation.push_back(Graph(randomGraph(), 0));
-		
+		alicePopulation.push_back(Graph(randomGraph(), 0));	
 	}
+	
+	cout << "ocjenjujem pocetni" << endl;
 	//rating fitness of created Alice
 	for (Graph alice : alicePopulation)
 	{
-		alice.fitness = rateAlice(alice.graph, plaintext, key);
+		double fitnessSum = 0;
+		for(int i=0; i<keys.size(); i++)
+		{
+			fitnessSum += rateAlice(alice.graph, plaintexts.at(i), keys.at(i));
+		}
+		alice.fitness = fitnessSum * 1.0 / keys.size();
 	}
+	
 	//evolution algorithm
 	for (int generation = 0; generation < generationsA; generation++)
 	{
-		for (int n = 0; n < crossoversInTournamentA; n++)
+		for (int n = 0; n < crossoversInGenerationA; n++)
 		{
-			vector<int> idsToCross;
-			for (int t = 0; t < tournamentSizeA; t++)
+			vector<int> idsToCross; //ids from population
+			while(idsToCross.size() < tournamentSizeA)
 			{
 				int id = rand() % populationSizeA;
-				idsToCross.push_back(id);
+				if (std::find(idsToCross.begin(), idsToCross.end(), id) != idsToCross.end()) {
+					//already in vector
+				}
+				else {
+					idsToCross.push_back(id);
+				}
 			}
 			int idOfWorst = idsToCross.at(0);
 			for (int i = 0; i < idsToCross.size(); i++)
 			{
-				if (alicePopulation.at(idsToCross.at(i)).fitness <= alicePopulation.at(idOfWorst).fitness) {
+				if (alicePopulation.at(idsToCross.at(i)).fitness < alicePopulation.at(idOfWorst).fitness) {
 					idOfWorst = idsToCross.at(i);
 				}
 			}
+			//cout << "\n najgora alice: ";
+			//print(alicePopulation.at(idOfWorst));
+			//cout << endl;
 			int indexOfFirst, indexOfSecond;
 			do {
 				indexOfFirst = rand() % tournamentSizeA;
@@ -60,13 +81,13 @@ int main(void)
 			{
 				indexOfSecond = rand() % tournamentSizeA;
 			} while (idsToCross.at(indexOfSecond) == idOfWorst || idsToCross.at(indexOfSecond) == idsToCross.at(indexOfFirst));
-			Graph offspring = crossAndReturnBestOfThreeAlice(alicePopulation.at(indexOfFirst), alicePopulation.at(indexOfSecond), key, plaintext);
+			Graph offspring = crossAndReturnBestOfThreeAlice(alicePopulation.at(indexOfFirst), alicePopulation.at(indexOfSecond), keys, plaintexts);
 			alicePopulation.at(idOfWorst) = offspring;
 			double probability = static_cast <double> (rand()) / static_cast <double> (RAND_MAX);
 
 			if (probability < mutationProbabilityA)
 			{
-				Graph mutated = mutationAlice(alicePopulation.at(idOfWorst), key, plaintext);
+				Graph mutated = mutationAlice(alicePopulation.at(idOfWorst), keys, plaintexts);
 				alicePopulation.at(idOfWorst) = mutated;
 			}
 		}
@@ -87,16 +108,27 @@ int main(void)
 	print(bestAlice);
 	cout << "fitness: " << bestAlice.fitness << endl;
 
-	cout << " IDEM PRINTATI RANDOMIZIRANE!!!! +++++++++++++++++++" << endl;
-	for(int i = 0; i<10; i++)
+	cout << "PRINTAM RANDOMIZIRANE INPUTE:" << endl;
+	
+	vector<vector<unsigned char>> plaintextsRand;
+	vector<vector<unsigned char>> keysRand;
+
+	for (int i = 0; i < sizeTestingSet; i++)
 	{
 		p.key = randomKey();
 		k.key = randomKey();
 
-		plaintext = p.toChar();
-		key = k.toChar();
+		plaintextsRand.push_back(p.toChar());
+		keysRand.push_back(k.toChar());
+	}
 
-		double fitnessRand = rateAlice(bestAlice.graph, plaintext, key);
-		cout << fitnessRand << endl;
+	for(int i = 0; i<keysRand.size(); i++)
+	{
+		double fitnessSum = 0;
+		for (int i = 0; i < keysRand.size(); i++)
+		{
+			fitnessSum += rateAlice(bestAlice.graph, plaintextsRand.at(i), keysRand.at(i));
+		}
+		cout << fitnessSum * 1.0 / keysRand.size() << endl;
 	}
 }

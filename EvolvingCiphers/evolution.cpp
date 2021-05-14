@@ -275,13 +275,18 @@ Graph evaluateBob(vector <unsigned char>& plaintext, vector <unsigned char>& key
 	fillInitialPopulationCGP(graphsBob, key, plaintext, ciphertext);
 	for (int generation = 0; generation < generations; generation++)
 	{
-		for (int n = 0; n < crossoversInTournament; n++)
+		for (int n = 0; n < crossoversInGeneration; n++)
 		{
-			vector<int> idsToCross;
-			for (int t = 0; t < tournamentSize; t++)
+			vector<int> idsToCross; //ids from population
+			while (idsToCross.size() < tournamentSize)
 			{
 				int id = rand() % populationSize;
-				idsToCross.push_back(id);
+				if (std::find(idsToCross.begin(), idsToCross.end(), id) != idsToCross.end()) {
+					//already in vector
+				}
+				else {
+					idsToCross.push_back(id);
+				}
 			}
 			int idOfWorst = idsToCross.at(0);
 			for (int i = 0; i < idsToCross.size(); i++)
@@ -331,13 +336,18 @@ Key evaluateEva(Graph& bob, vector <unsigned char>& plaintext, vector <unsigned 
 	fillInitialPopulationKeys(keyPopulation, bob, plaintext, ciphertext);
 	for (int generation = 0; generation < generations; generation++)
 	{
-		for (int n = 0; n < crossoversInTournament; n++)
+		for (int n = 0; n < crossoversInGeneration; n++)
 		{
-			vector<int> idsToCross;
-			for (int t = 0; t < tournamentSize; t++)
+			vector<int> idsToCross; //ids from population
+			while (idsToCross.size() < tournamentSize)
 			{
 				int id = rand() % populationSize;
-				idsToCross.push_back(id);
+				if (std::find(idsToCross.begin(), idsToCross.end(), id) != idsToCross.end()) {
+					//already in vector
+				}
+				else {
+					idsToCross.push_back(id);
+				}
 			}
 			int idOfWorst = idsToCross.at(0);
 			for (int i = 0; i < idsToCross.size(); i++)
@@ -411,10 +421,16 @@ double rateAlice(vector<int>& aliceGraph, vector<unsigned char>& plaintext, vect
 	return calculateFitness(bob.fitness, eva.fitness);
 }
 
-Graph crossAndReturnBestOfThreeAlice(Graph& firstParent, Graph& secondParent, vector<unsigned char>& key, vector<unsigned char>& plaintext)
+Graph crossAndReturnBestOfThreeAlice(Graph& firstParent, Graph& secondParent, vector<vector<unsigned char>>& keys, vector<vector<unsigned char>>& plaintexts)
 {
 	Graph child(crossover(firstParent.graph, secondParent.graph), NULL);
-	child.fitness = rateAlice(child.graph, key, plaintext);
+	double fitnessSum = 0;
+	for(int i = 0; i< keys.size(); i++)
+	{
+		fitnessSum += rateAlice(child.graph, keys.at(i), plaintexts.at(i));
+	}
+	
+	child.fitness = fitnessSum * 1.0 / keys.size();
 
 	Graph betterParent = firstParent;
 	if (secondParent.fitness > firstParent.fitness)
@@ -429,7 +445,7 @@ Graph crossAndReturnBestOfThreeAlice(Graph& firstParent, Graph& secondParent, ve
 	return betterParent;
 }
 
-Graph mutationAlice(Graph& alice, vector<unsigned char>& key, vector<unsigned char>& plaintext)
+Graph mutationAlice(Graph& alice, vector<vector<unsigned char>>& keys, vector<vector<unsigned char>>& plaintexts)
 {
 	int graphSize = alice.graph.size();
 	vector<int> graph = alice.graph;
@@ -456,9 +472,15 @@ Graph mutationAlice(Graph& alice, vector<unsigned char>& key, vector<unsigned ch
 		graph[index] = outRandom;
 	}
 
+	double fitnessSum = 0;
+	for (int i = 0; i < keys.size(); i++)
+	{
+		fitnessSum += rateAlice(graph, keys.at(i), plaintexts.at(i));
+	}
+
+	double fitness = fitnessSum * 1.0 / keys.size();
 
 
-	double fitness = rateAlice(graph, key, plaintext);
 	Graph mutatedGraph(graph, fitness); 
 
 	return mutatedGraph; //novi!!!

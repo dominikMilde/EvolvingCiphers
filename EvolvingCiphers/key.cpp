@@ -4,6 +4,8 @@
 Key::Key(vector<bool> key, double fitness) : key(key), fitness(fitness){}
 Key::Key() {}
 
+
+
 vector<unsigned char> Key::toChar()
 {
     vector <unsigned char> vectored;

@@ -39,9 +39,9 @@ void fillInitialPopulationKeys(vector<Key>& keys, Graph& bob, vector <unsigned c
 
 double rateAlice(vector<int>& alice, vector <unsigned char>& plaintext, vector <unsigned char>& key);
 
-Graph crossAndReturnBestOfThreeAlice(Graph& firstParent, Graph& secondParent, vector<unsigned char>& key, vector<unsigned char>& plaintext);
+Graph crossAndReturnBestOfThreeAlice(Graph& firstParent, Graph& secondParent, vector<vector<unsigned char>>& keys, vector<vector<unsigned char>>& plaintext);
 
-Graph mutationAlice(Graph& alice, vector<unsigned char>& key, vector<unsigned char>& plaintext);
+Graph mutationAlice(Graph& alice, vector<vector<unsigned char>>& keys, vector<vector<unsigned char>>& plaintexts);
 
 
 

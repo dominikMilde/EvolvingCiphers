@@ -9,6 +9,7 @@ using namespace std;
 Graph::Graph(vector<int> graph, double fitness) : graph(graph), fitness(fitness) {}
 Graph::Graph() {}
 
+
 //CGP cgp(2, 1, 1, 2, 2);
 CGP::CGP(int n, int m, int r, int c, int a) :  n(n), m(m), r(r), c(c), a(a){}
 
