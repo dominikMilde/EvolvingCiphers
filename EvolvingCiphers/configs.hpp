@@ -10,13 +10,13 @@
 
 //evolutionBobAndEve
 #define generations 50
-#define populationSize 20
-#define tournamentSize 10
-#define crossoversInGeneration 5
+#define populationSize 10
+#define tournamentSize 5
+#define crossoversInGeneration 3
 #define mutationProbability 0.5
 
 //evolutionAlice
-#define generationsA 200
+#define generationsA 100
 #define populationSizeA 50
 #define tournamentSizeA 10
 #define crossoversInGenerationA 8
@@ -26,5 +26,5 @@
 #define keyLength 4
 
 //number of plaintexts and key
-#define sizeLearningSet 10
+#define sizeLearningSet 5
 #define sizeTestingSet 50
