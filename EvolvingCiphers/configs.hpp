@@ -4,16 +4,16 @@
 #define numInputs 2
 #define numOutputs 1
 #define numRows 1
-#define numColumns 20
+#define numColumns 10
 #define numNodeInputs 2 
 #define numFunctions 9
 
 //evolutionBobAndEve
 #define generations 50
 #define populationSize 10
-#define tournamentSize 5
-#define crossoversInGeneration 3
-#define mutationProbability 0.5
+#define tournamentSize 3
+#define crossoversInGeneration 2
+#define mutationProbability 0.9
 
 //evolutionAlice
 #define generationsA 100
@@ -26,5 +26,5 @@
 #define keyLength 4
 
 //number of plaintexts and key
-#define sizeLearningSet 5
+#define sizeLearningSet 550
 #define sizeTestingSet 50
