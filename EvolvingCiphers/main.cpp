@@ -11,31 +11,23 @@ int main(void)
 	CGP cgpAlice(numInputs, numOutputs, numRows, numColumns, numNodeInputs);
     srand(time(NULL));
 	cout << "stvaram pocetni skup" << endl;
-	//Key p;
-	//Key k;
+	Key p;
+	Key k;
 
     vector<vector<unsigned char>> plaintexts;
 
-	vector <unsigned char> pl = { 0b10011000 };
-	vector<unsigned char> key = { 0b11110000 };
+	for(int i = 0; i<sizeLearningSet; i++)
+	{
+		p.key = randomKey();
+		plaintexts.push_back(p.toChar());
+	}
 
-	plaintexts.push_back(pl);
+	k.key = randomKey();
+	vector <unsigned char>key = k.toChar();
 
-	//for(int i = 0; i<sizeLearningSet; i++)
-	//{
-		//p.key = randomKey();
-		//plaintexts.push_back(p.toChar());
-//	}
 
-	//k.key = randomKey();
-	//key = k.toChar();
-
-	vector <int> graf = { 3,0,1,5,2,1,3 };
-	Graph alice = Graph(graf, 0);
-	cgpAlice.graph = alice.graph;
-
-	print(alice);
-
+	//print(alice);
+	/*
 	vector<vector<unsigned char>> ciphertexts;
 	for(int i=0; i<plaintexts.size(); i++)
 	{
@@ -43,19 +35,22 @@ int main(void)
 		ciphertexts.push_back(c);
 	}
 
-	bitset<8> bt{ ciphertexts[0][0] };
-	cout << bt << endl;
 
-	graf = { 4,0,0,3,2,1,3};
-	cgpAlice.graph = graf;
-
-	vector <unsigned char> poc = cgpAlice.generateCipher(ciphertexts[0], key);
-
-	bitset<8> poce{ poc[0] };
-	cout << poce;
-	//evaluateBob(plaintexts, key, ciphertexts);
+	Graph bob = evaluateBob(plaintexts, key, ciphertexts);
 	
-	/*
+	cgpAlice.graph = bob.graph;
+
+	vector<vector<unsigned char>> ciphertexts1;
+	for (int i = 0; i < plaintexts.size(); i++)
+	{
+		vector <unsigned char> c = cgpAlice.generateCipher(ciphertexts.at(i), key);
+		ciphertexts1.push_back(c);
+	}
+	
+	double provjera = fitnessFunctionMultiple(plaintexts, ciphertexts1);
+	cout << "PROV:" << provjera << endl;
+	*/
+
 	vector<Graph> alicePopulation;
 	Graph bestAlice;
 	
@@ -128,7 +123,7 @@ int main(void)
 	
 	print(bestAlice);
 	cout << "\nfitness: " << bestAlice.fitness << endl;
-	*/
+	
 
 }
 

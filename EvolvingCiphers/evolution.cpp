@@ -281,14 +281,14 @@ void print(Graph& g) {
 Graph evaluateBob(vector <vector <unsigned char>>& plaintexts, vector <unsigned char>& key, vector <vector <unsigned char>>& ciphertexts)
 {
 	fillInitialPopulationCGP(graphsBob, key, plaintexts, ciphertexts);
-	cout << "Generation: 0" << endl;
-	bestBob = findBestGraph(graphsBob);
-	cout << "Score of best individual BOB: " << bestBob.fitness << endl;
+	//cout << "Generation: 0" << endl;
+	//bestBob = findBestGraph(graphsBob);
+	//cout << "Score of best individual BOB: " << bestBob.fitness << endl;
 	//cout << "Genes of the best individual BOB: ";
-	for (auto b : graphsBob)
-	{
-		print(b);
-	}
+	//for (auto b : graphsBob)
+	//{
+	//	print(b);
+	//}
 	
 	for (int generation = 0; generation < generations; generation++)
 	{
@@ -324,15 +324,15 @@ Graph evaluateBob(vector <vector <unsigned char>>& plaintexts, vector <unsigned 
 			}
 		}
 
-		cout << "Generation: " << generation + 1 << endl;
+		//cout << "Generation: " << generation + 1 << endl;
 		bestBob = findBestGraph(graphsBob);
-		cout << "Score of best individual BOB: " << bestBob.fitness << endl;
-		for(auto b : graphsBob)
-		{
-			print(b);
-		}
+		//cout << "Score of best individual BOB: " << bestBob.fitness << endl;
+		//for(auto b : graphsBob)
+		//{
+		//	print(b);
+		//}
 
-		cout << "------------------------------------" << endl;
+		//cout << "------------------------------------" << endl;
 
 		if (bestBob.fitness > 0.99) {
 			return bestBob;
