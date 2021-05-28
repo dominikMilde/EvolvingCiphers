@@ -426,7 +426,8 @@ double rateAlice(vector<int>& aliceGraph, vector <vector<unsigned char>>& plaint
 	//}
 	Graph bob = evaluateBob(plaintexts, key, ciphertexts);
 	//cout << "zavrsio bobove" << endl;
-	cout << "najbolji bob:" << bob.fitness << endl;
+	cout << "najbolji bob: ";
+	print(bob);
 	//cout << "arhitektura boba: ";
 	//print(bob);
 	Key eva = evaluateEva(bob, plaintexts, ciphertexts);

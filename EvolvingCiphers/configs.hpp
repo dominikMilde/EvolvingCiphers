@@ -12,13 +12,13 @@
 #define generations 50
 #define populationSize 15
 #define tournamentSize 10
-#define mutationProbability 0.6
+#define mutationProbability 0.5
 
 //evolutionAlice
 #define generationsA 100
 #define populationSizeA 25
 #define tournamentSizeA 10
-#define mutationProbabilityA 0.6
+#define mutationProbabilityA 0.5
 
 //key
 #define keyLength 24
