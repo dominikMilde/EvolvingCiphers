@@ -65,7 +65,7 @@ int main(void)
 	cout << "ocjenjujem pocetni" << endl;
 	//rating fitness of created Alice
 	
-	for (Graph alice : alicePopulation)
+	for (Graph& alice : alicePopulation)
 	{
 		double fitness = rateAlice(alice.graph, plaintexts, key);
 		alice.fitness = fitness;
@@ -75,6 +75,18 @@ int main(void)
 	//evolution algorithm
 	for (int generation = 0; generation < generationsA; generation++)
 	{
+		cout << "Generation: " << generation << endl;
+		for (auto a : alicePopulation)
+		{
+			print(a);
+		}
+		bestAlice = findBestGraph(alicePopulation);
+		cout << "FITNESS Alice: " << bestAlice.fitness << endl;
+		print(bestAlice);
+
+		if (bestAlice.fitness > 0.49) {
+			break;
+		}
 		for (int n = 0; n < tournamentSizeA; n++)
 		{
 			int indexOfFirst, indexOfSecond;
@@ -107,18 +119,7 @@ int main(void)
 			}
 		}
 
-		cout << "Generation: " << generation + 1 << endl;
-		for (auto a : alicePopulation)
-		{
-			print(a);
-		}
-		bestAlice = findBestGraph(alicePopulation);
-		cout << "FITNESS Alice: " << bestAlice.fitness << endl;
-		print(bestAlice);
-
-		if (bestAlice.fitness > 0.49) {
-			break;
-		}
+		
 	}
 	
 	print(bestAlice);

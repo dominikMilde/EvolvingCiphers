@@ -346,7 +346,7 @@ Graph evaluateBob(vector <vector <unsigned char>>& plaintexts, vector <unsigned 
 Key evaluateEva(Graph& bob, vector <vector <unsigned char>>& plaintexts, vector <vector <unsigned char>>& ciphertexts)
 {
 	fillInitialPopulationKeys(keyPopulation, bob, plaintexts, ciphertexts);
-	for (int generation = 0; generation < generations; generation++)
+	for (int generation = 0; generation < generations * 2; generation++)
 	{
 			for (int n = 0; n < tournamentSize; n++)
 			{
@@ -426,11 +426,12 @@ double rateAlice(vector<int>& aliceGraph, vector <vector<unsigned char>>& plaint
 	//}
 	Graph bob = evaluateBob(plaintexts, key, ciphertexts);
 	//cout << "zavrsio bobove" << endl;
-	cout << "najbolji bob:" << bob.fitness << endl;
+	cout << "najbolji bob:";
 	//cout << "arhitektura boba: ";
-	//print(bob);
+	print(bob);
 	Key eva = evaluateEva(bob, plaintexts, ciphertexts);
-	cout << "najbolja eva:" << eva.fitness << endl;
+	cout << "najbolja eva:";
+	eva.printKey();
 	//eva.printKey();
 	//cout << endl;
 	//cout << "FITNES ALICE: " << bob.fitness - eva.fitness << endl;
