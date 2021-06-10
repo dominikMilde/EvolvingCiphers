@@ -26,7 +26,7 @@ int main(void)
 	vector <unsigned char>key = k.toChar();
 	k.printKey();
 
-	cgpAlice.graph = { 2, 1, 1, 5, 0, 2, 0, 0, 1, 1, 0, 0, 3, 5, 2, 5, 3, 3 ,3 ,4 ,6 ,5, 6, 8, 3, 6, 9, 5, 4, 3, 0, 8, 7, 5, 11, 8, 5, 3, 2, 2, 9, 8, 2, 1, 3, 4, 12, 6, 3, 11, 13, 3, 6, 16, 1, 18, 17, 4, 9, 14, 21 };
+	cgpAlice.graph = { 1, 1, 1, 2, 2, 2, 3, 3, 1, 7, 4, 0, 6, 1, 0, 2, 1, 0, 6, 4, 7, 4, 2, 0, 6, 6, 0, 3, 0, 8, 7, 6, 0, 2, 3, 1, 5, 11, 0, 2, 13, 6, 3, 2, 7, 4, 9, 16, 1, 17, 3, 3, 10, 12, 4, 2, 9, 6, 16, 19, 14 };
 	for (auto a : cgpAlice.graph) {
 		cout << a << " ";
 	}
@@ -41,7 +41,7 @@ int main(void)
 	double f = fitnessFunctionMultiple(plaintexts, ciphertexts);
 	cout << "Slicnost plaina i ciphera: " << f << endl;
 
-	vector<int> bobgraph = { 0, 1, 0, 4, 2, 0, 4, 3, 2, 4, 4, 1, 1, 1, 0, 2, 5, 1, 1, 7, 5, 5, 0, 3, 3, 0, 3, 3, 1, 0, 2, 11, 10, 1, 10, 5, 0, 8, 1, 2, 11, 3, 4, 10, 8, 2, 11, 10, 5, 6, 0, 3, 3, 3, 5, 10, 7, 0, 20, 4, 1 };
+	vector<int> bobgraph = { 2, 0, 0, 1, 0, 1, 4, 0, 3, 0, 2, 2, 4, 3, 3, 3, 2, 0, 2, 1, 5, 0, 4, 6, 3, 3, 8, 7, 4, 1, 3, 3, 8, 7, 12, 10, 5, 6, 2, 2, 14, 3, 1, 7, 15, 6, 13, 2, 7, 7, 14, 0, 3, 5, 2, 14, 18, 0 ,17, 17, 11 };
 	Graph bob(bobgraph, NULL);
 
 	Key eva = evaluateEva(bob, plaintexts, ciphertexts);

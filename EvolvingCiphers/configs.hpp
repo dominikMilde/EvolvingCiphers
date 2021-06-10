@@ -21,7 +21,7 @@
 #define mutationProbabilityA 0.5
 
 //key
-#define keyLength 5
+#define keyLength 24
 
 //number of plaintexts and key
 #define sizeLearningSet 3
