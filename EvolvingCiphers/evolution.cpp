@@ -347,7 +347,7 @@ Graph evaluateBob(vector <vector <unsigned char>>& plaintexts, vector <unsigned 
 Key evaluateEva(Graph& bob, vector <vector <unsigned char>>& plaintexts, vector <vector <unsigned char>>& ciphertexts)
 {
 	fillInitialPopulationKeys(keyPopulation, bob, plaintexts, ciphertexts);
-	for (int generation = 0; generation < generations * 2; generation++)
+	for (int generation = 0; generation < generations; generation++)
 	{
 			for (int n = 0; n < tournamentSize; n++)
 			{
@@ -383,7 +383,7 @@ Key evaluateEva(Graph& bob, vector <vector <unsigned char>>& plaintexts, vector 
 
 		//cout << "Generation: " << generation + 1 << endl;
 		bestEvaKey = findBestKey(keyPopulation);
-		//cout << "Score of best individual EVA: " << bestEvaKey.fitness << endl;
+		cout << " " << bestEvaKey.fitness;
 		
 
 		//for(auto k : keyPopulation)

@@ -6,7 +6,7 @@
 #define numRows 1
 #define numColumns 20
 #define numNodeInputs 2 
-#define numFunctions 8
+#define numFunctions 6
 
 //evolutionBobAndEve
 #define generations 50
@@ -21,7 +21,7 @@
 #define mutationProbabilityA 0.5
 
 //key
-#define keyLength 24
+#define keyLength 5
 
 //number of plaintexts and key
 #define sizeLearningSet 3
