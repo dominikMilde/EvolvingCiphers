@@ -324,9 +324,10 @@ Graph evaluateBob(vector <vector <unsigned char>>& plaintexts, vector <unsigned 
 			}
 		}
 
-		//cout << "Generation: " << generation + 1 << endl;
+		cout << "Generation: " << generation + 1 << endl;
 		bestBob = findBestGraph(graphsBob);
-		//cout << "Score of best individual BOB: " << bestBob.fitness << endl;
+		cout << "Score of best individual BOB : ";
+		print(bestBob);
 		//for(auto b : graphsBob)
 		//{
 		//	print(b);
