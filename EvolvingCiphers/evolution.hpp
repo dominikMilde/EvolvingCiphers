@@ -44,3 +44,5 @@ Graph crossAndReturnBestOfThreeAlice(Graph& firstParent, Graph& secondParent, ve
 Graph mutationAlice(Graph& alice, vector<unsigned char>& key, vector<vector<unsigned char>>& plaintexts);
 
 double fitnessFunctionMultiple(vector <vector<unsigned char>>& inputs, vector <vector<unsigned char>>& outputs);
+
+void primjeniRunde(vector <vector <unsigned char>>& plaintexts, CGP& cgpAlice, CGP& cgpBob, vector <unsigned  char>& k, vector <unsigned char>& keyEva, int numOfRounds);

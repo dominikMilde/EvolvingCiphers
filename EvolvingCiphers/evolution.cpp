@@ -489,3 +489,68 @@ Graph mutationAlice(Graph& alice, vector <unsigned char>& key, vector<vector<uns
 
 	return mutatedGraph; //novi!!!
 }
+void primjeniRunde(vector <vector <unsigned char>>& plaintexts, CGP& cgpAlice, CGP& cgpBob, vector <unsigned  char>& k, vector <unsigned char>& keyEva, int numOfRounds) {
+	vector<vector <unsigned char>> ciphers = plaintexts;
+	double d = fitnessFunctionMultiple(ciphers, plaintexts);
+	//cout << d << endl;
+
+	cout << "Izvorni tekst Alice:\n";
+	for (int i = 0; i < plaintexts.size(); i++) {
+		for (int j = 0; j < plaintexts.at(0).size(); j++) {
+			cout << plaintexts.at(i).at(j);
+		}
+		cout << endl;
+	}
+	cout << endl;
+
+	for (int i = 0; i < numOfRounds; i++) {
+		for (int j = 0; j < plaintexts.size(); j++) {
+			vector<unsigned char> c = cgpAlice.generateCipher(ciphers.at(j), k);
+			ciphers.at(j) = c;
+		}
+	}
+
+	double ddd = fitnessFunctionMultiple(ciphers, plaintexts);
+	//cout << ddd << endl;
+	cout << "Sifrat Alice:\n";
+	for (int i = 0; i < plaintexts.size(); i++) {
+		for (int j = 0; j < plaintexts.at(0).size(); j++) {
+			cout << ciphers.at(i).at(j);
+		}
+		cout << endl;
+	}
+	cout << endl;
+	vector <vector <unsigned char>> decipher = ciphers;
+	for (int i = 0; i < numOfRounds; i++) {
+		for (int j = 0; j < plaintexts.size(); j++) {
+			vector<unsigned char> c = cgpBob.generateCipher(decipher.at(j), k);
+			decipher.at(j) = c;
+		}
+	}
+
+	cout << "Bob desifrira:\n";
+	for (int i = 0; i < plaintexts.size(); i++) {
+		for (int j = 0; j < plaintexts.at(0).size(); j++) {
+			cout << decipher.at(i).at(j);
+		}
+		cout << endl;
+	}
+	cout << endl;
+
+	vector <vector <unsigned char>> decipherEva = ciphers;
+	for (int i = 0; i < numOfRounds; i++) {
+		for (int j = 0; j < plaintexts.size(); j++) {
+			vector<unsigned char> c = cgpBob.generateCipher(decipherEva.at(j), keyEva);
+			decipherEva.at(j) = c;
+		}
+	}
+
+	cout << "Eva vidi: \n";
+	for (int i = 0; i < plaintexts.size(); i++) {
+		for (int j = 0; j < plaintexts.at(0).size(); j++) {
+			cout << decipherEva.at(i).at(j);
+		}
+		cout << endl;
+	}
+	cout << endl;
+}

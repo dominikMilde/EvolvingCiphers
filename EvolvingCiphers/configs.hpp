@@ -6,23 +6,23 @@
 #define numRows 1
 #define numColumns 20
 #define numNodeInputs 2 
-#define numFunctions 6
+#define numFunctions 8
 
 //evolutionBobAndEve
 #define generations 50
-#define populationSize 15
+#define populationSize 50
 #define tournamentSize 10
 #define mutationProbability 0.5
 
 //evolutionAlice
-#define generationsA 100
+#define generationsA 20
 #define populationSizeA 25
-#define tournamentSizeA 10
+#define tournamentSizeA 20
 #define mutationProbabilityA 0.5
 
 //key
-#define keyLength 24
+#define keyLength 16
 
 //number of plaintexts and key
-#define sizeLearningSet 10
+#define sizeLearningSet 1
 #define sizeTestingSet 50
